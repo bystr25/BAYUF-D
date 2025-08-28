@@ -236,7 +236,7 @@
             }
             
             updateOrderSummary();
-            showNotification(${itemName} ditambahkan ke pesanan!);
+            showNotification(`${itemName} ditambahkan ke pesanan!`);
         }
 
         function updateOrderSummary() {
@@ -246,6 +246,9 @@
             
             if (orderItems.length === 0) {
                 orderSummary.classList.add('hidden');
+                totalPrice = 0;
+                totalPriceSpan.textContent = 'Rp 0';
+                orderItemsDiv.innerHTML = '';
                 return;
             }
             
@@ -269,12 +272,13 @@
                 `;
             });
             
-            totalPriceSpan.textContent = Rp ${totalPrice.toLocaleString()};
+            totalPriceSpan.textContent = `Rp ${totalPrice.toLocaleString()}`;
         }
 
         function removeItem(index) {
             orderItems.splice(index, 1);
             updateOrderSummary();
+            showNotification('Item dihapus dari pesanan.');
         }
 
         function clearOrder() {
@@ -289,23 +293,25 @@
                 return;
             }
             
-            let message = "Halo BAYU F&B! Saya ingin memesan:\n\n";
+            let message = `Halo BAYU F&B! Saya ingin memesan:\n\n`;
             orderItems.forEach(item => {
-                message += • ${item.name} x${item.quantity} = Rp ${item.total.toLocaleString()}\n;
+                message += `• ${item.name} x${item.quantity} = Rp ${item.total.toLocaleString()}\n`;
             });
-            message += \nTotal: Rp ${totalPrice.toLocaleString()}\n\nTerima kasih!;
-            
-            const whatsappUrl = https://wa.me/6285922906073?text=${encodeURIComponent(message)};
+            message += `\nTotal: Rp ${totalPrice.toLocaleString()}\n\nTerima kasih!`;
+
+            const encoded = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/6285922906073?text=${encoded}`;
             window.open(whatsappUrl, '_blank');
         }
 
         function openSocialMedia(platform) {
             if (platform === 'instagram') {
-                showNotification('Sedang dalam pemulihan');
+                showNotification('Mengalihkan ke Instagram @bayufnb...');
+                // uncomment dan sesuaikan jika ingin membuka link nyata:
                 // window.open('https://instagram.com/bayufnb', '_blank');
             } else if (platform === 'tiktok') {
                 showNotification('Mengalihkan ke TikTok @bayufnb...');
-                window.open('https://tiktok.com/@bay.stawn', '_blank');
+                // window.open('https://tiktok.com/@bayufnb', '_blank');
             }
         }
 
@@ -320,13 +326,12 @@
             }, 3000);
         }
 
-        // Auto-hide order summary when clicking outside
+        // (Optional) close order summary when clicking outside it
         document.addEventListener('click', function(event) {
             const orderSummary = document.getElementById('orderSummary');
-            if (!orderSummary.contains(event.target) && !event.target.closest('button[onclick^="orderItem"]')) {
-                // Keep it visible if there are items
-            }
+            // jika ada pesanan dan klik di luar orderSummary, jangan sembunyikan otomatis
+            // (biarkan user melihat ringkasan); jika mau auto-hide, bisa diatur di sini.
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9761c87121dc9d72',t:'MTc1NjM2Mjg2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
